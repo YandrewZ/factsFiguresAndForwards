@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Facts, Figures & Forwards</title>
+
+    <!-- Boostrap, jQuery, and other Reqs. -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/timeline.js"></script>
+    <link rel="stylesheet" href="css/timeline.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Smooth Scrolling jQuery script -->
+    <script>
+    $(document).ready(function(){
+      // Add smooth scrolling to all links
+      $("a").on('click', function(event) {
+
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+          // Prevent default anchor click behavior
+          event.preventDefault();
+
+          // Store hash
+          var hash = this.hash;
+
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+        }, 1000, function(){
+
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        } // End if
+      });
+    });
+    </script>
+
+    <!-- CSV File Scripting -->
+    <script>
+
+    getData();
+
+    async function getData(){
+        const response = await fetch('blacklivesmatter_05-25_06-12_topTweets_urlSummary_test_file.csv');
+        const data = await Response.text();
+        console.log(data);
+    }
+
+    </script>
+
+    <!-- Personalized Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+    <!-- Marker for top of page -->
+    <a id="top">asd</a>
+
+    <!-- NavBar for Page -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">The Timeline</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="#">Facts, Figures, & Forwards</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#top">May 25th</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link date-obj" href="#bottom"></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Timeline code -->
+    <div class="container-whole">
+        <div class="container-fluid">
+        	<div class="row">
+        	    <div id="timeline">
+        			<div class="row timeline-movement timeline-movement-top">
+        				<div class="timeline-badge timeline-future-movement">
+        						<p>May 25th</p>
+        				</div>
+        			</div>
+        			<div class="row timeline-movement">
+        				<div class="timeline-badge center-left">
+
+        				</div>
+        				<div class="col-sm-6  timeline-item">
+        					<div class="row">
+        						<div class="col-sm-11">
+        							<div class="timeline-panel credits  anim animate fadeInLeft">
+        								<ul class="timeline-panel-ul">
+        									<div class="lefting-wrap">
+        										<li class="img-wraping"><a href="#"><img src="http://via.placeholder.com/250/000000" class="img-responsive" alt="user-image" /></a></li>
+        									</div>
+        									<div class="righting-wrap">
+        										<li><a href="#" class="importo">Article Title</a></li>
+        										<li><span class="causale" style="color:#000; font-weight: 600;">Source </span> </li>
+        										<li><span class="causale">Introductory snippet from article or website. Limit it to ~200-300 characters to give a short desc but not overwhelm the reader.</span> </li>
+        										<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Likes: 9999, Article Appearances on #BlackLivesMatter: 9999</small></p> </li>
+        									</div>
+        									<div class="clear"></div>
+        								</ul>
+        							</div>
+
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+
+        			<div class="row timeline-movement">
+        				<div class="timeline-badge center-right">
+
+        				</div>
+        				<div class="offset-sm-6 col-sm-6  timeline-item">
+        					<div class="row">
+        						<div class="offset-sm-1 col-sm-11">
+        							<div class="timeline-panel debits  anim animate  fadeInRight">
+        								<ul class="timeline-panel-ul">
+        									<div class="lefting-wrap">
+        										<li class="img-wraping"><a href="#"><img src="http://via.placeholder.com/250/000000" class="img-responsive" alt="user-image" /></a></li>
+        									</div>
+        									<div class="righting-wrap">
+        										<li><a href="#" class="importo">Article Title</a></li>
+        										<li><span class="causale" style="color:#000; font-weight: 600;">Source </span> </li>
+        										<li><span class="causale">Introductory snippet from article or website. Limit it to ~200-300 characters to give a short desc but not overwhelm the reader.</span> </li>
+        										<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Likes: 9999, Article Appearances on #BlackLivesMatter: 9999</small></p> </li>
+        									</div>
+        									<div class="clear"></div>
+        								</ul>
+        							</div>
+
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+
+        			<div class="row timeline-movement">
+        				<div class="timeline-badge center-left">
+
+        				</div>
+        				<div class="col-sm-6  timeline-item">
+        					<div class="row">
+        						<div class="col-sm-11">
+        							<div class="timeline-panel credits  anim animate  fadeInLeft">
+        								<ul class="timeline-panel-ul">
+        									<div class="lefting-wrap">
+        										<li class="img-wraping"><a href="#"><img src="http://via.placeholder.com/250/000000" class="img-responsive" alt="user-image" /></a></li>
+        									</div>
+        									<div class="righting-wrap">
+        										<li><a href="#" class="importo">Article Title</a></li>
+        										<li><span class="causale" style="color:#000; font-weight: 600;">Source </span> </li>
+        										<li><span class="causale">Introductory snippet from article or website. Limit it to ~200-300 characters to give a short desc but not overwhelm the reader.</span> </li>
+        										<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Likes: 9999, Article Appearances on #BlackLivesMatter: 9999</small></p> </li>
+        									</div>
+        									<div class="clear"></div>
+        								</ul>
+        							</div>
+
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+
+        			<div class="row timeline-movement timeline-movement-top">
+        				<div class="timeline-badge timeline-future-movement">
+        						<p class="date-obj"></p>
+        				</div>
+        			</div>
+
+
+        			<div class="row timeline-movement">
+        				<div class="timeline-badge center-right">
+
+        				</div>
+        				<div class="offset-sm-6 col-sm-6  timeline-item">
+        					<div class="row">
+        						<div class="offset-sm-1 col-sm-11">
+        							<div class="timeline-panel debits  anim animate  fadeInRight">
+        								<ul class="timeline-panel-ul">
+        									<div class="lefting-wrap">
+        										<li class="img-wraping"><a href="#"><img src="http://via.placeholder.com/250/000000" class="img-responsive" alt="user-image" /></a></li>
+        									</div>
+        									<div class="righting-wrap">
+        										<li><a href="#" class="importo">Article Title</a></li>
+        										<li><span class="causale" style="color:#000; font-weight: 600;">Source </span> </li>
+        										<li><span class="causale">Introductory snippet from article or website. Limit it to ~200-300 characters to give a short desc but not overwhelm the reader.</span> </li>
+        										<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Likes: 9999, Article Appearances on #BlackLivesMatter: 9999</small></p> </li>
+        									</div>
+        									<div class="clear"></div>
+        								</ul>
+        							</div>
+
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+
+
+        			<div class="row timeline-movement">
+        				<div class="timeline-badge center-left">
+
+        				</div>
+        				<div class="col-sm-6  timeline-item">
+        					<div class="row">
+        						<div class="col-sm-11">
+        							<div class="timeline-panel credits  anim animate  fadeInLeft">
+        								<ul class="timeline-panel-ul">
+        									<div class="lefting-wrap">
+        										<li class="img-wraping"><a href="#"><img src="http://via.placeholder.com/250/000000" class="img-responsive" alt="user-image" /></a></li>
+        									</div>
+        									<div class="righting-wrap">
+        										<li><a href="#" class="importo">Article Title</a></li>
+        										<li><span class="causale" style="color:#000; font-weight: 600;">Source </span> </li>
+        										<li><span class="causale">Introductory snippet from article or website. Limit it to ~200-300 characters to give a short desc but not overwhelm the reader.</span> </li>
+        										<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>Likes: 9999, Article Appearances on #BlackLivesMatter: 9999</small></p> </li>
+        									</div>
+        									<div class="clear"></div>
+        								</ul>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+    </div>
+
+    <!-- Marker for bottom of page -->
+    <a id="bottom"></a>
+</body>
+<footer>
+    <script type="text/javascript" src="js/dates.js"></script>
+</footer>
+
+</html>
