@@ -18,16 +18,14 @@ $(window).scroll(function() {
 function extendFile() {
     if(datesLeft){
         // let tempArt = fetch_HEAD(global_links_array[universal_date_index], 0);
-
-        let finished_top = createTop();
-
-        let tempDate = addDays(m25, universal_date_index);
-
-        finished_top.getElementsByClassName("top-node-date")[0].innerText = Months[tempDate.getMonth()] + " " + getDayAsStr(tempDate.getDate());
-
-        timeline.appendChild(finished_top);
         try{
+            let finished_top = createTop();
+
+            let tempDate = addDays(m25, universal_date_index);
+
+            finished_top.getElementsByClassName("top-node-date")[0].innerText = Months[tempDate.getMonth()] + " " + getDayAsStr(tempDate.getDate());
             if(articlesByDate[universal_date_index].length > 4){
+                timeline.appendChild(finished_top);
                 for(let i = 0; i < 2; i++){
                     if(turn_right){
                         tempCard = createRightMid();
@@ -49,13 +47,14 @@ function extendFile() {
                 }
                 turn_right = !turn_right;
                 tempCard.getElementsByClassName("article-title")[0].innerText = `View ${articlesByDate[universal_date_index].length - 2} more links shared on ${Months[tempDate.getMonth()]} ${getDayAsStr(tempDate.getDate())}`;
-                tempCard.getElementsByClassName("article-title")[0].onclick = function () { displayList(getVal(universal_date_index), tempDate) };
+                tempCard.getElementsByClassName("article-title")[0].onclick = displayList(getVal(universal_date_index), tempDate);
                 tempCard.getElementsByClassName("article-title")[0].href = 'extra_html/link_list.html';
                 tempCard.getElementsByClassName("introductory-snippet")[0].innerText = `${articlesByDate[universal_date_index][2].link}\n${articlesByDate[universal_date_index][3].link}\n...`;
                 tempCard.getElementsByClassName("source-url")[0].innerText = '';
                 timeline.appendChild(tempCard);
 
             } else{
+                timeline.appendChild(finished_top);
                 for(let i = 0; i < articlesByDate[universal_date_index].length; i++){
                     if(turn_right){
                         tempCard = createRightMid();
