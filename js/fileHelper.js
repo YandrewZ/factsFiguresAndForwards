@@ -1,4 +1,6 @@
-let global_article_list = 'blacklivesmatter_05-25_06-12_topTweets_urlSummary.csv';
+let csvFile = 'blacklivesmatter_05-25_06-12_topTweets_urlSummary.csv';
+
+let global_article_list = undefined;
 
 let global_links_array = [];
 let global_likes_array = [];
@@ -60,4 +62,4 @@ function createArticleObjects(){
     }
 }
 
-getData('csv/blacklivesmatter_05-25_06-12_topTweets_urlSummary_test_file.csv');
+getData(csvFile);
