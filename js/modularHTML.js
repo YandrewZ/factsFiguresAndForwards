@@ -12,7 +12,6 @@ let mid_left_bp = document.getElementById("timeline_mid_left_bp");
 $(window).scroll(function() {
    if($(window).scrollTop() + $(window).height() > $(document).height() - 400) {
        extendFile();
-       extendFile();
    }
 });
 

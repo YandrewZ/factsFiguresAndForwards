@@ -80,8 +80,10 @@ function sortArticlesByDate(){
 
 function sortArticlesByMentions(){
     for(var i = 0; i < articlesByDate.length; i++){
-        articlesByDate[i].sort((a, b) => a.mentions - b.mentions);
-        articlesByDate[i].reverse();
+        articlesByDate[i].sort((a, b) => {
+            if( b.mentions === a.mentions ) return b.likes - a.likes;
+            return b.mentions - a.mentions;
+        });
     }
 }
 
