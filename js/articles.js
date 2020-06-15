@@ -84,3 +84,11 @@ function sortArticlesByMentions(){
         articlesByDate[i].reverse();
     }
 }
+
+function displayList(id, date){
+    if( !window.localStorage) alert("Sorry, you're using an unsupported browser");
+    else {
+        localStorage.myArray = JSON.stringify(articlesByDate[id]);
+        localStorage.setItem('date', Months[date.getMonth()] + " " + getDayAsStr(date.getDate()));
+    }
+}

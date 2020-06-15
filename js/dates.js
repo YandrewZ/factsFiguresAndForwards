@@ -45,7 +45,7 @@ Days = {
     22: "22nd",
     23: "23rd",
     24: "24th",
-    25: "25th", 
+    25: "25th",
     26: "26th",
     27: "27th",
     28: "28th",
@@ -74,4 +74,8 @@ function addDays(date, days) {
   let copy = new Date(Number(date))
   copy.setDate(date.getDate() + days)
   return copy
+}
+
+function dateToMD(date){
+    Months[date.getMonth()] + " " + getDayAsStr(date.getDate());
 }

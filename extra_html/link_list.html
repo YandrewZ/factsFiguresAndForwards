@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Link List</title>
+        <script type="text/javascript" src="../js/dates.js"></script>
+    </head>
+    <body>
+        <h1 id="header">All Links For </h1>
+        <p id="holder"></p>
+    </body>
+
+    <footer>
+        <script type="text/javascript">
+            document.getElementById("header").innerText += ` ${localStorage.getItem('date')}`;
+            let articles = JSON.parse(localStorage.myArray);
+            for(var i = 0; i < articles.length; i++){
+                document.getElementById("holder").innerText += `Mentions: ${articles[i].mentions}, Likes: ${articles[i].likes}, Time Posted: ${articles[i].time}, Link:     ${articles[i].link}\n`;
+            }
+        </script>
+    </footer>
+</html>
