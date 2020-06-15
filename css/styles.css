@@ -32,11 +32,64 @@ body {
     }
 }
 
+#intro {
+    background-color: #00a8cc;
+    background-image: linear-gradient(to bottom, #005082 , #fff);
+}
+
 #title {
-  background-color: #00a8cc;
-  background-image: linear-gradient(to right, #005082 , #00a8cc);
   background-size: cover;
   width: 100%;
+}
+
+.header-table {
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+#about-section {
+    border:0;
+    width: 100%;
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.main-about {
+    font-size: 1.3em;
+}
+
+.about-project {
+    padding-bottom: 25px;
+    max-width: 1000px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-table {
+    table-layout: fixed;
+    text-align: center;
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+td {
+    padding: 10px;
+}
+
+.about-us {
+    text-align: center;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.about {
+    text-align: center;
+}
+
+#timeline-top {
+    text-align: center;
 }
 
 .container-fluid{
