@@ -9,7 +9,7 @@ let global_dates_array = [];
 
 let global_line_length = undefined;
 
-fetch csv files and parse them into text.
+//fetch csv files and parse them into text.
 async function getData(url){
     const response = await fetch(url);
     const data = await response.text();
