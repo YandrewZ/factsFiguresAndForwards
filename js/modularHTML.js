@@ -21,9 +21,10 @@ function extendFile() {
         try{
             let finished_top = createTop();
 
-            const tempDate = addDays(m25, universal_date_index);
+            const cached_date = addDays(m25, universal_date_index);
+            const cached_date_index = universal_date_index;
 
-            finished_top.getElementsByClassName("top-node-date")[0].innerText = Months[tempDate.getMonth()] + " " + getDayAsStr(tempDate.getDate());
+            finished_top.getElementsByClassName("top-node-date")[0].innerText = Months[cached_date.getMonth()] + " " + getDayAsStr(cached_date.getDate());
             if(articlesByDate[universal_date_index].length > 4){
                 timeline.appendChild(finished_top);
                 for(let i = 0; i < 2; i++){
@@ -46,11 +47,11 @@ function extendFile() {
                     tempCard = createLeftMid();
                 }
 
-                const cached_date_index = universal_date_index;
+
 
                 turn_right = !turn_right;
                 tempCard.getElementsByClassName("article-title")[0].innerText = `View ${articlesByDate[universal_date_index].length - 2} more links shared on ${Months[tempDate.getMonth()]} ${getDayAsStr(tempDate.getDate())}`;
-                tempCard.getElementsByClassName("article-title")[0].onclick = displayList(cached_date_index, tempDate);
+                tempCard.getElementsByClassName("article-title")[0].onclick = displayList(cached_date_index, cached_date);
                 tempCard.getElementsByClassName("article-title")[0].href = 'extra_html/link_list.html';
                 tempCard.getElementsByClassName("introductory-snippet")[0].innerText = `${articlesByDate[universal_date_index][2].link}\n${articlesByDate[universal_date_index][3].link}\n...`;
                 tempCard.getElementsByClassName("source-url")[0].innerText = '';
