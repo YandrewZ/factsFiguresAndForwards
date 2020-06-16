@@ -1,133 +1,224 @@
-let timeline = document.getElementById('timeline');
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 
-let datesLeft = true;
-let turn_right = true;
-let universal_date_index = 0;
-let current_article_index = 0;
+<head>
+    <meta charset="utf-8">
+    <title>Facts, Figures & Forwards</title>
 
-let top_bp = document.getElementById("timeline_top_bp");
-let mid_right_bp = document.getElementById("timeline_mid_right_bp");
-let mid_left_bp = document.getElementById("timeline_mid_left_bp");
+    <link rel="icon" href="images/icon.ico">
 
-$(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 400) {
-       extendFile();
-   }
-});
+    <!-- Boostrap, jQuery, and other Reqs. -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/timeline.js"></script>
+    <link rel="stylesheet" href="css/timeline.css">
 
-function extendFile() {
-    if(datesLeft){
-        // let tempArt = fetch_HEAD(global_links_array[universal_date_index], 0);
-        try{
-            let finished_top = createTop();
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-            const tempDate = addDays(m25, universal_date_index);
+    <!-- axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
 
-            finished_top.getElementsByClassName("top-node-date")[0].innerText = Months[tempDate.getMonth()] + " " + getDayAsStr(tempDate.getDate());
-            if(articlesByDate[universal_date_index].length > 4){
-                timeline.appendChild(finished_top);
-                for(let i = 0; i < 2; i++){
-                    if(turn_right){
-                        tempCard = createRightMid();
-                    } else{
-                        tempCard = createLeftMid();
-                    }
-                    turn_right = !turn_right;
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
 
-                    tempCard.getElementsByClassName("article-title")[0].innerText = articlesByDate[universal_date_index][i].link;
-                    tempCard.getElementsByClassName("article-title")[0].href = articlesByDate[universal_date_index][i].link;
-                    tempCard.getElementsByClassName("source-url")[0].innerText = `Appearances on #BlackLivesMatter: ${articlesByDate[universal_date_index][i].mentions}\nLikes on source Tweet: ${articlesByDate[universal_date_index][i].likes}`;
-                    tempCard.getElementsByClassName("introductory-snippet")[0].innerText = '';
-                    timeline.appendChild(tempCard);
-                }
-                if(turn_right){
-                    tempCard = createRightMid();
-                } else{
-                    tempCard = createLeftMid();
-                }
+    <!-- Smooth Scrolling jQuery script -->
+    <script>
+    $(document).ready(function(){
+      // Add smooth scrolling to all links
+      $("a").on('click', function(event) {
 
-                const cached_date_index = universal_date_index;
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+          // Prevent default anchor click behavior
+          event.preventDefault();
 
-                turn_right = !turn_right;
-                tempCard.getElementsByClassName("article-title")[0].innerText = `View ${articlesByDate[universal_date_index].length - 2} more links shared on ${Months[tempDate.getMonth()]} ${getDayAsStr(tempDate.getDate())}`;
-                tempCard.getElementsByClassName("article-title")[0].onclick = displayList(getVal(cached_date_index), tempDate);
-                tempCard.getElementsByClassName("article-title")[0].href = 'extra_html/link_list.html';
-                tempCard.getElementsByClassName("introductory-snippet")[0].innerText = `${articlesByDate[universal_date_index][2].link}\n${articlesByDate[universal_date_index][3].link}\n...`;
-                tempCard.getElementsByClassName("source-url")[0].innerText = '';
-                timeline.appendChild(tempCard);
+          // Store hash
+          var hash = this.hash;
 
-            } else{
-                timeline.appendChild(finished_top);
-                for(let i = 0; i < articlesByDate[universal_date_index].length; i++){
-                    if(turn_right){
-                        tempCard = createRightMid();
-                    } else{
-                        tempCard = createLeftMid();
-                    }
-                    turn_right = !turn_right;
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+        }, 1000, function(){
 
-                    tempCard.getElementsByClassName("article-title")[0].innerText = articlesByDate[universal_date_index][i].link;
-                    tempCard.getElementsByClassName("article-title")[0].href = articlesByDate[universal_date_index][i].link;
-                    tempCard.getElementsByClassName("source-url")[0].innerText = `Appearances on #BlackLivesMatter: ${articlesByDate[universal_date_index][i].mentions}\nLikes on source Tweet: ${articlesByDate[universal_date_index][i].likes}`;
-                    tempCard.getElementsByClassName("introductory-snippet")[0].innerText = '';
-                    timeline.appendChild(tempCard);
-                }
-            }
-            universal_date_index++;
-            if(universal_date_index >= articlesByDate.length){
-                datesLeft = false;
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-}
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        } // End if
+      });
+    });
+    </script>
 
-//fucntion for creating a card on the right side of the screen
-function createRightMid(){
-    let mid_right_clone = mid_right_bp.cloneNode(true);
-    mid_right_clone.id = "";
-    mid_right_clone.style = "";
-    return mid_right_clone;
-}
+    <!-- Articles JS File -->
+    <script type="text/javascript" src="js/articles.js"></script>
 
-//function for creating a card on the left side of the screen
-function createLeftMid(){
-    let mid_left_clone = mid_left_bp.cloneNode(true);
-    mid_left_clone.id = "";
-    mid_left_clone.style = "";
-    return mid_left_clone;
-}
+    <!-- CSV File Scripting -->
+    <script type="text/javascript" src="js/fileHelper.js"></script>
 
-//function for creating a pointer for the date
-function createTop() {
-    let top_clone = top_bp.cloneNode(true);
-    top_clone.id = global_dates_array[universal_date_index];
-    top_clone.style = "";
-    return top_clone;
-}
+    <!-- Small JS utility file for getting today's date -->
+    <script type="text/javascript" src="js/dates.js"></script>
 
-// async function fetch_HEAD(url, index){
-//     console.log(url);
-//     let data = '';
-//     const proxies = ["https://cors-anywhere.herokuapp.com/", "https://cors-proxy.htmldriven.com/?url=", "https://thingproxy.freeboard.io/fetch/"]
-//     if(index < proxies.length){
-//         try {
-//             const response = await fetch(proxies[index] + url, {method: 'GET'});
-//             data = await response.text();
-//         } catch(e) {
-//             console.log(e);
-//             fetch_HEAD(url, index + 1);
-//         }
-//     } else {
-//         console.log('All proxies have failed');
-//     }
-//     let parser = new DOMParser();
-//     let xmlDoc = parser.parseFromString(data, 'text/xml');
-//     console.log(xmlDoc);
-//     let ret = {};
-//     try{ret.image = xmlDoc.querySelector('[rel="image_src"]')[0].href; return ret;} catch{}
-//     try{ret.image = xmlDoc.querySelector('[property="og:image"]')[0].content; return ret;} catch{}
-//
-//     return ret;
-// }
+    <!-- Personalized Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+    <!-- Blueprints for modular HTML -->
+    <div class="row timeline-movement timeline-movement-top" id="timeline_top_bp" style="display: none !important;">
+        <div class="timeline-badge timeline-future-movement">
+                <p class="top-node-date">DATE</p>
+        </div>
+    </div>
+    <div class="row timeline-movement" style="display: none !important;" id="timeline_mid_left_bp">
+        <div class="timeline-badge center-left">
+        </div>
+        <div class="col-sm-6  timeline-item">
+            <div class="row">
+                <div class="col-sm-11">
+                    <div class="timeline-panel credits  anim animate fadeInLeft">
+                        <ul class="timeline-panel-ul">
+                            <div>
+                                <li><a href="#" onclick="" class="importo article-title">Article Link</a></li>
+                                <li><span class="causale source-url" style="color:#000; font-weight: 600;">Likes/Mentions </span> </li>
+                                <li><span class="causale introductory-snippet">Extra</span> </li>
+                            </div>
+                            <div class="clear"></div>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row timeline-movement" id="timeline_mid_right_bp" style="display: none !important;">
+        <div class="timeline-badge center-right">
+        </div>
+        <div class="offset-sm-6 col-sm-6  timeline-item">
+            <div class="row">
+                <div class="offset-sm-1 col-sm-11">
+                    <div class="timeline-panel debits  anim animate  fadeInRight">
+                        <ul class="timeline-panel-ul">
+                            <div>
+                                <li><a href="#" onclick="" class="importo article-title">Article Link</a></li>
+                                <li><span class="causale source-url" style="color:#000; font-weight: 600;">Likes/Mentions </span> </li>
+                                <li><span class="causale introductory-snippet">Extra</span> </li>
+                            </div>
+                            <div class="clear"></div>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cover Page -->
+    <section id="intro">
+        <section id="title">
+
+          <div class="title-container container-fluid">
+
+            <!-- Nav Bar -->
+
+            <nav class="navbar navbar-expand-lg navbar-dark">
+              <p class="navbar-brand-name" href="#">
+                  facts, figures & forwards
+              </p>
+              <img class="navbar-brand" src="SVG/logo.svg" alt="logo">
+
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item"> <a class="nav-link" href="#timeline-top">timeline</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="#about-section">about</a> </li>
+                  <li class="nav-item"> <a class="nav-link" href="https://github.com/YandrewZ/tweet_analysis">github repository</a> </li>
+                </ul>
+              </div>
+            </nav>
+
+
+            <!-- Title -->
+            <section class="header-table">
+                <div class="row">
+                    <div class="title-image-col col-lg-6">
+                      <img class="title-image" src="SVG/logo.svg" alt="logo">
+                    </div>
+                    <div class="header-image-col col-lg-6">
+                        <h1>trending (hash)tags</h1>
+                        <p>a comprehensive timeline of shared twitter links</p>
+                    </div>
+                </div>
+            </section>
+
+
+          </div>
+
+        </section>
+        <section id="about-section" class="about">
+            <div class="about-project">
+                <h2>about the project</h2>
+                <p class="main-about">
+                facts, figures, & forwards is a python-based web-scraping project intended to store useful and trending links shared on twitter, presenting them in a clear and meaningful manner<br />
+                </p>
+                <p>
+                twitter’s extensive outreach as an information distribution platform has attracted over 330 million users. through incessant activity world-wide, the ever-growing social media/news conglomerate is home to <strong>trillions</strong> of tweets, providing opinions, information, and links on pressing global matters.  we have set out to identify these tweets and extract links in an attempt to enhance the publicly available data on relevant issues. our algorithms focus on the top tweets for specific hashtags to ensure higher quality results. <br />
+                </p>
+                <p>
+                our data is presented in a timeline format, separating links by their parent tweet’s posting date. this format concentrates on the development of issues in their longevity. for each individual date, the links are sorted by appearances on their respective hashtags, acting as a measure of activity and agreement on the link’s veritability. mentions are valued over likes in our algorithms as they require active participation in the spread of the link.
+                </p>
+                <p>
+                facts, figures & forwards currently only supports the #BlackLivesMatter hashtag as it is an imperative focal point in today’s society, however, the algorithms and code utilized to collect, parse, and present the data can be applied to any available hashtag. this system allows a similar stream of information to be replicated with any future social, cultural, or political issue, as well as any other imaginable topic with a used, contemporary twitter tag.
+                </p>
+                <p>most links are presented without deliberate tampering as to ensure impartial data distribution<br /></p>
+                <small>*bit.ly, ow.ly, youtube, and similar link types have been double-checked by the creators to keep the data relevant at the discretion of the reviewing party<br />*we do not take responsibility or necessarily share views with any links presented here</small>
+            </div>
+            <!-- <div class="about-us">
+                <h2>about us</h2>
+                <table class="table-about table-borderless">
+                    <thead>
+                        <tr>
+                          <th scope="col">Yiheng (Andrew) Zhu</th>
+                          <th scope="col">Maximo Fernandez</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Python tweet scraping and data acquisition</td>
+                          <td>Web development</td>
+                        </tr>
+                      </tbody>
+                </table>
+            </div> -->
+
+        </section>
+    </section>
+
+    <!-- Timeline code -->
+    <section id="timeline-top">
+        <h1 id="timeline-top-h1">timeline</h1>
+    </section>
+    <div class="container-whole">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="timeline">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Marker for bottom of page -->
+    <a id="footer"></a>
+</body>
+<footer>
+    <!-- JS utility file for modular HTML. Used for timeline -->
+    <script type="text/javascript" src="js/modularHTML.js"></script>
+</footer>
+
+</html>
