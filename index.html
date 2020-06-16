@@ -2,16 +2,6 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169350820-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-    
-        gtag('config', 'UA-169350820-1');
-    </script>
-
     <meta charset="utf-8">
     <title>Facts, Figures & Forwards</title>
 
@@ -35,7 +25,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
-    
+
     <!-- Smooth Scrolling jQuery script -->
     <script>
     $(document).ready(function(){
@@ -64,14 +54,14 @@
     });
     </script>
 
+    <!-- Small JS utility file for getting today's date -->
+    <script type="text/javascript" src="js/dates.js"></script>
+
     <!-- Articles JS File -->
     <script type="text/javascript" src="js/articles.js"></script>
 
     <!-- CSV File Scripting -->
     <script type="text/javascript" src="js/fileHelper.js"></script>
-
-    <!-- Small JS utility file for getting today's date -->
-    <script type="text/javascript" src="js/dates.js"></script>
 
     <!-- Personalized Stylesheet -->
     <link rel="stylesheet" href="css/styles.css">
@@ -91,7 +81,7 @@
         <div class="col-sm-6  timeline-item">
             <div class="row">
                 <div class="col-sm-11">
-                    <div class="timeline-panel credits  anim animate fadeInLeft">
+                    <div class="timeline-panel credits">
                         <ul class="timeline-panel-ul">
                             <div>
                                 <li><a href="#" onclick="" class="importo article-title">Article Link</a></li>
@@ -112,7 +102,7 @@
         <div class="offset-sm-6 col-sm-6  timeline-item">
             <div class="row">
                 <div class="offset-sm-1 col-sm-11">
-                    <div class="timeline-panel debits  anim animate  fadeInRight">
+                    <div class="timeline-panel debits">
                         <ul class="timeline-panel-ul">
                             <div>
                                 <li><a href="#" onclick="" class="importo article-title">Article Link</a></li>
@@ -150,6 +140,15 @@
                   <li class="nav-item"> <a class="nav-link" href="#timeline-top">timeline</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="#about-section">about</a> </li>
                   <li class="nav-item"> <a class="nav-link" href="https://github.com/YandrewZ/tweet_analysis">github repository</a> </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Creators
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="#">Yiheng (Andrew) Zhu</a>
+                      <a class="dropdown-item" href="https://maxfer1221.github.io/cv/">Maximo Fernandez</a>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </nav>

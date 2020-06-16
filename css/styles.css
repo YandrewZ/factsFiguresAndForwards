@@ -10,6 +10,14 @@ body {
   overflow-x: hidden;
 }
 
+p {
+    font-size: 1.4em;
+}
+
+h2 {
+    font-size: 2.4em;
+}
+
 @media (max-width: 988px){
   #title {
     text-align: center;
@@ -43,8 +51,8 @@ body {
 }
 
 .header-table {
-    padding-top: 20px;
-    padding-bottom: 50px;
+    padding-top: 200px;
+    padding-bottom: 200px;
 }
 
 #about-section {
@@ -56,7 +64,7 @@ body {
 }
 
 .main-about {
-    font-size: 1.3em;
+    font-size: 1.6em;
 }
 
 .about-project {
@@ -142,4 +150,17 @@ td {
 
 .header-image-col, .title-image-col{
     right: auto;
+}
+
+.dropdown-item {
+    background-color: transparent;
+}
+
+.dropdown-menu {
+    background-color: transparent;
+    border-width: 0;
+}
+
+.dropdown-item:hover {
+    background-color: transparent;
 }
