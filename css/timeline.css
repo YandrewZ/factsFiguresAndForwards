@@ -164,7 +164,7 @@
 	width: 100%;
 }
 #timeline .timeline-movement .timeline-item .timeline-panel.credits .timeline-panel-ul li a.importo  {
-  color: #ffa41b;
+  color: #005082;
   font-size: 1.3em;
   font-weight: 600;
 }
@@ -172,7 +172,7 @@
   text-align: left;
 }
 #timeline .timeline-movement .timeline-item .timeline-panel.debits .timeline-panel-ul a.importo {
-  color: #ffa41b;
+  color: #005082;
   font-size: 1.3em;
   font-weight: 600;
 }

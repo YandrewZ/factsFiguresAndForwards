@@ -41,18 +41,18 @@ h2 {
 }
 
 #intro {
-    background-color: #00a8cc;
-    background-image: linear-gradient(to bottom, #005082 , #fff);
+
 }
 
 #title {
   background-size: cover;
   width: 100%;
+  background-image: linear-gradient(to right, #005082 , #00a8cc);
 }
 
 .header-table {
-    padding-top: 200px;
-    padding-bottom: 200px;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 #about-section {
@@ -93,12 +93,25 @@ td {
 }
 
 .about {
+    padding-top: 100px;
     text-align: center;
+    padding-bottom: 60px;
 }
 
 #timeline-top {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 30px;
+    width: 100%;
+    background-image: linear-gradient(to right, #005082 , #00a8cc);
+    height: 7em;
+    text-align: center;
+    display: table;
+}
+
+#timeline-top-h1 {
+    vertical-align: middle;
+    padding: auto;
+    display: table-cell;
 }
 
 .container-fluid{
@@ -164,3 +177,8 @@ td {
 .dropdown-item:hover {
     background-color: transparent;
 }
+
+/* .divider {
+    background-image: linear-gradient(to right, #005082 , #00a8cc);
+    height: 100px;
+} */
