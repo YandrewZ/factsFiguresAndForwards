@@ -47,11 +47,9 @@ function extendFile() {
                     tempCard = createLeftMid();
                 }
 
-
-
                 turn_right = !turn_right;
                 tempCard.getElementsByClassName("article-title")[0].innerText = `View ${articlesByDate[universal_date_index].length - 2} more links shared on ${Months[cached_date.getMonth()]} ${getDayAsStr(cached_date.getDate())}`;
-                tempCard.getElementsByClassName("article-title")[0].onclick = displayList(cached_date_index, cached_date);
+                tempCard.getElementsByClassName("article-title")[0].onclick = `displayList(${cached_date_index}, ${cached_date})`;
                 tempCard.getElementsByClassName("article-title")[0].href = 'extra_html/link_list.html';
                 tempCard.getElementsByClassName("introductory-snippet")[0].innerText = `${articlesByDate[universal_date_index][2].link}\n${articlesByDate[universal_date_index][3].link}\n...`;
                 tempCard.getElementsByClassName("source-url")[0].innerText = '';
