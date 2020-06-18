@@ -215,24 +215,58 @@
     </div> -->
 
     <!-- Timeline code -->
-    <section id="timeline-top">
-        <h1 id="timeline-top-h1">timeline</h1>
-    </section>
-    <div class="container-whole">
-        <div class="container-fluid">
-            <div class="row">
-                <div id="timeline">
+    <div class="timeline-nav-div center" id="timeline-nav-div">
+        <nav class="timeline-nav navbar navbar-expand-lg navbar-dark">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="timeline-nav-header" href="#">
+          timeline
+          </h1>
 
+          <div class="collapse navbar-collapse timeline-nav-search-func" id="navbarSupportedContent2">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <form class="form-inline">
+                      <div class="form-group mb-2" id="date_input_form">
+                        <input type="text" class="form-control" id="input_month" placeholder="mm">
+                        <label>/</label>
+                        <input type="text" class="form-control" id="input_date" placeholder="dd">
+                        <label>/</label>
+                        <input type="text" class="form-control" id="input_year" placeholder="yy">
+                      </div>
+                      <button onclick="javascript:attemptSearchByDate();" type="button" class="btn btn-outline-dark mb-2">search by date</button>
+                    </form>
+                </li>
+                <li class="nav-item"> <a class="nav-link scroll-top" href="#timeline-top">scroll to top</a> </li>
+              </ul>
+          </div>
+        </nav>
+    </div>
+
+    <div id="timeline-top">
+        <div class="container-whole">
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="timeline">
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Marker for bottom of page -->
     <a id="footer"></a>
 </body>
 <footer>
     <!-- JS utility file for modular HTML. Used for timeline -->
     <script type="text/javascript" src="js/modularHTML.js"></script>
+    <script type="text/javascript" src="js/searchByDateButtonFunctionality.js"></script>
+    <script type="text/javascript">
+        $("#timeline-nav").data("top", $("#timeline-nav").offset().top);
+        const cached_navbar_loc = $("#timeline-nav").offset().top;
+    </script>
 </footer>
 
 </html>

@@ -6,6 +6,8 @@ let global_links_array = [];
 let global_likes_array = [];
 let global_mntns_array = [];
 let global_dates_array = [];
+let active_dates_array = [];
+let global_dates_only_array = [];
 
 let global_line_length = undefined;
 

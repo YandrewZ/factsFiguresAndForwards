@@ -70,6 +70,18 @@ function dateToDate(date){
 function sortArticlesByDate(){
     for(var i = 0; i < getDaysSinceStart(); i++){
         articlesByDate.push([]);
+        let temporaryDate = addDays(m25, i);
+        let d = temporaryDate.getDate();
+        let m = temporaryDate.getMonth() + 1;
+        let y = temporaryDate.getFullYear()%100;
+        if(d.toString().length == 1){
+            d = `0${d}`;
+        } if(m.toString().length == 1){
+            m = `0${m}`;
+        } if(y.toString().length == 1){
+            y = `0${y}`;
+        }
+        global_dates_only_array.push(`${y}-${m}-${d}`);
     }
     for(var i = 0; i < articles.length; i++){
         let a = articles[i];

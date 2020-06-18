@@ -101,7 +101,8 @@ function createLeftMid(){
 //function for creating a pointer for the date
 function createTop() {
     let top_clone = top_bp.cloneNode(true);
-    top_clone.id = global_dates_array[universal_date_index];
+    top_clone.id = global_dates_only_array[universal_date_index];
+    active_dates_array.push(global_dates_only_array[universal_date_index]);
     top_clone.style = "";
     return top_clone;
 }
