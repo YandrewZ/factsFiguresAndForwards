@@ -20,7 +20,7 @@ def unshortenLinks(outlinks, unshortener):
 
 def generateMessage(minimum_likes, data_list):
     ###
-    # RETURN: A string message that contains number of minimum likes, number of tweets, 
+    # RETURN: A string messa    ge that contains number of minimum likes, number of tweets, 
     #            dates of latest and earlier tweets
     # 
     # minimum_likes: int, the mnimum number of likes used in the final query
@@ -85,13 +85,15 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
                 break
 
             # Tweets without outlinks won't have the 'links' field
+
             tweet_data = {
                         'text': tweet.renderedContent, 
                         'datetime': tweet.date, 
                         'likeCount': tweet.likeCount, 
                         'retweetCount': tweet.retweetCount, 
                         'replyCount': tweet.replyCount, 
-                        'quoteCount': tweet.quoteCount }
+                        'quoteCount': tweet.quoteCount
+                        }
         
             # Only create the 'links' field for tweets that have outlinks
             if(tweet.outlinks != []):
@@ -199,3 +201,98 @@ def writeToMongoDB(data_list, uri, db, collection):
 
     # return the operation result and a list of errored documents (tweet entries)
     return bulk_write_result, errored_docs
+
+### 
+# nodejs communication module
+#
+# utilizes the sys and json libraries to communicate with the server
+# functions through the use of child processes within the main server framework
+import sys
+import json
+
+# function for turning dictionaries, tuples, and more, into json serializble blocks
+def toJson(data):
+    return json.dumps(data, default=str)
+
+
+# unicode reconfiguration to allow for ptinting/writing to/from console
+sys.stdin.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')
+
+# ni: node input
+#
+# ni can take two forms
+# this depends on what function the python script is serving at the time
+#
+# the two modes are
+#
+# retreival :
+#   mode used to perform the retreival of tweets
+#   ni object (dictionary) will take the following form:
+#   {
+#     mode       : String 'retreive',          // mode detailing whether python file should
+#                                              // scrape for tweets or write to database
+#     hashtag    : String '#hashtag',          // hashtag to scrape
+#     startdate  : String 'yyyy-mm-dd',        // start date for scrape
+#     enddate    : String 'yyyy-mm-dd',        // end date for scrape
+#     maxtweets  : Int 500,                    // maximum number of tweets to be retreived (default 500, max of TBD)
+#     minlikes   : Int 0,                      // unused value for minimum number of likes
+#                                              // for scraped tweet. kept for future use
+#     authkey    : String 'auth-key',          // utilized in nodejs server framework security
+#     error      : Boolean false,              // utilized in nodejs server framework
+#   }
+#
+#
+# write :
+#   mode used to write documents into the database
+#   ni object (dictionary) will take the following form:
+#   {
+#     mode       : String 'write',             // mode detailing whether python file should
+#                                              // scrape for tweets or write to database
+#     data_list  : TBD
+#     uri        : String 'uri',               // uri string for access to the database
+#     db         : String 'db_name',           // database name
+#     collection : String 'collection_name',   // collection name
+#
+#     authkey    : String 'auth-key',          // utilized in nodejs server framework security
+#     error      : Boolean false,              // utilized in nodejs server framework
+#   }
+#
+# *dictionaries may include extra fields not highlited here, but are likely trivial*
+
+# parse JSON string into python dictionary
+ni     = json.loads(sys.argv[1])
+foStr  = sys.argv[2]
+capStr = sys.argv[3]
+
+# collect tweets
+if ni["mode"] == "retreive":
+    output = fetchTopTweetsIterative(ni["hashtag"], ni["startdate"], ni["enddate"], ni["maxtweets"])
+    output_str = toJson(output[0])
+    o_format = "json"
+
+# write to database
+elif ni["mode"] == "write":
+    output = writeToMongoDB(ni["data_list"], ni["uri"], ni["db"], ni["collection"])
+    output_str = repr(output[1])
+    o_format = "r/w mongodb"
+
+# output printed to communicate with nodejs
+# 
+# output is returned in a specif manner that allows nodejs
+# to understand this is the output containing the final data
+#
+# the output will be a string formatted as follows:
+# """
+# $$FINAL_OUTPUT$$
+# $$DATA$$
+# {
+#   "$format$" : Str "json" || "r/w mongodb",    //string displaying whether the
+#                                                //format of the data will be a json
+#                                                //or TBD
+#   "$data$" : List [] || TBD                    //data returned from python script
+# }
+# """
+final_output = f"""{foStr}{capStr}{{"$format$" : "{o_format}","$data$" : {output_str}}}"""
+print(final_output)
+###
