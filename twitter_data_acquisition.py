@@ -73,8 +73,7 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
         #                        lang:en  -filter:replies'
         # queryString syntax: filter:links - search only tweets with links
         # queryString syntax: min_faves:1 - search tweets with a minimum of 1 like
-        
-        
+
     try:
         for i, tweet in enumerate(result):
             if(i % 50 == 0):
@@ -85,15 +84,13 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
                 break
 
             # Tweets without outlinks won't have the 'links' field
-
             tweet_data = {
-                        'text': tweet.renderedContent, 
+                        'text': tweet.content, 
                         'datetime': tweet.date, 
                         'likeCount': tweet.likeCount, 
                         'retweetCount': tweet.retweetCount, 
                         'replyCount': tweet.replyCount, 
-                        'quoteCount': tweet.quoteCount
-                        }
+                        'quoteCount': tweet.quoteCount }
         
             # Only create the 'links' field for tweets that have outlinks
             if(tweet.outlinks != []):
@@ -113,7 +110,7 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
 
 
 
-def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets):
+def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_likes=1000000, declineRate = 0.75):
     ###
     # RETURN:    A list of dictionaries with fields of tweet info, length not guaranteed to be maxTweets
     #            - fields: string text , datetime datetime , int likeCount, int retweetCount
@@ -130,10 +127,22 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets):
     # startDate: string, the first day of the query, including year - '2020-05-25'
     # endDate: string, last day of the query, including year - '2020-06-25'
     # maxTweets: int, maximum number of tweets to be retrieved - 1000
+    # minimum_likes: int, default is 1000000, searching tweets starting from a minimum number of likes - 5000
+    # declineRate: float, default is 0.75, the rate at which minimum_likes decreases. Range is (0,1), if out of 
+    #              range, converts it to fit the range
     ###
 
-    # Initialize minimum_likes
-    minimum_likes = 10000000
+    # 0 < declineRate < 1 
+    from math import floor
+    if(declineRate == 0 or declineRate == 1):
+        print("declineRate cannot be {}. Using default value 0.75".format(declineRate))
+        declineRate = 0.75
+    elif(abs(declineRate) > 1):
+        declineRate = round(1/abs(declineRate), 2)
+        print("0 < declineRate < 1. Using declineRate = 1 / |declineRate| = {}".format(declineRate))
+    elif(declineRate < 0):
+        declineRate = abs(declineRate)
+        print("0 < declineRate < 1. Using declineRate = |declineRate| = {}".format(declineRate))
 
     # Iniitialize current_data_list and desired_data_list (to be returned)
     current_data_list = retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes)
@@ -147,7 +156,7 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets):
     while(len(current_data_list) < maxTweets):
         if(minimum_likes == 0):
             break
-        minimum_likes = (minimum_likes * 3) // 4
+        minimum_likes = floor(minimum_likes * declineRate)
         desired_data_list = current_data_list.copy()
         current_data_list = retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes)
         # Error-Handling
