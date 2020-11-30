@@ -139,7 +139,7 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_like
     # 0 < declineRate < 1 
     from math import floor
     if(declineRate == 0 or declineRate == 1):
-        print("declineRate cannot be {}. Using default value 0.75".format(declineRate))
+        print("declineRate cannot be {}. Using default value 0.2".format(declineRate))
         declineRate = 0.75
     elif(abs(declineRate) > 1):
         declineRate = round(1/abs(declineRate), 2)
