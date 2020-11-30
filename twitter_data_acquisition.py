@@ -18,20 +18,20 @@ def unshortenLinks(outlinks, unshortener):
 
 
 
-def generateMessage(minimum_likes, data_list):
-    ###
-    # RETURN: A string messa    ge that contains number of minimum likes, number of tweets, 
-    #            dates of latest and earlier tweets
-    # 
-    # minimum_likes: int, the mnimum number of likes used in the final query
-    # data_list: list, of tweet entries retrieved in the final query
-    ###
+# def generateMessage(minimum_likes, data_list):
+#     ###
+#     # RETURN: A string messa    ge that contains number of minimum likes, number of tweets, 
+#     #            dates of latest and earlier tweets
+#     # 
+#     # minimum_likes: int, the mnimum number of likes used in the final query
+#     # data_list: list, of tweet entries retrieved in the final query
+#     ###
     
-    result_stats = 'With a minimum of {} likes, we found {} tweets for you.'.format(minimum_likes, len(data_list))
+#     result_stats = 'With a minimum of {} likes, we found {} tweets for you.'.format(minimum_likes, len(data_list))
 
-    result_datetimes = ' The latest of them was posted at {} and the earliest was posted at {}.'.format(data_list[0]['datetime'], data_list[len(data_list)-1]['datetime'])
+#     result_datetimes = ' The latest of them was posted at {} and the earliest was posted at {}.'.format(data_list[0]['datetime'], data_list[len(data_list)-1]['datetime'])
 
-    return result_stats + result_datetimes
+#     return result_stats + result_datetimes
 
 
 
@@ -73,24 +73,23 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
         #                        lang:en  -filter:replies'
         # queryString syntax: filter:links - search only tweets with links
         # queryString syntax: min_faves:1 - search tweets with a minimum of 1 like
-
+        
+        
     try:
         for i, tweet in enumerate(result):
-            if(i % 50 == 0):
-                print("This is the {}th tweet with a minimum of {} likes".format(i, minimum_likes))
-
             if(i >= maxTweets) :
-                print('END - maxTweets of {}'.format(i))
                 break
 
             # Tweets without outlinks won't have the 'links' field
+
             tweet_data = {
                         'text': tweet.content, 
                         'datetime': tweet.date, 
                         'likeCount': tweet.likeCount, 
                         'retweetCount': tweet.retweetCount, 
                         'replyCount': tweet.replyCount, 
-                        'quoteCount': tweet.quoteCount }
+                        'quoteCount': tweet.quoteCount
+                        }
         
             # Only create the 'links' field for tweets that have outlinks
             if(tweet.outlinks != []):
@@ -110,14 +109,19 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
 
 
 
-def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_likes=1000000, declineRate = 0.75):
+def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_likes=1000000, declineRate = 0.2):
     ###
     # RETURN:    A list of dictionaries with fields of tweet info, length not guaranteed to be maxTweets
     #            - fields: string text, datetime datetime, int likeCount, int retweetCount
     #                   int replyCount, int quoteCount, (list links - only when outlinks exist)
     #         AND
+    #               
+    #            A string 'TEMP'. No purpose, but necessary for NODE and PYTHON interaction 
+    #            
+    #            OLD ------------------------------------------------------------------------
     #            A string message that contains number of minimum likes, number of tweets, 
     #            dates of latest and earlier tweets
+    #            ----------------------------------------------------------------------------
     #     OR:   
     #            An Exception
     #         AND
@@ -127,15 +131,15 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_like
     # startDate: string, the first day of the query, including year - '2020-05-25'
     # endDate: string, last day of the query, including year - '2020-06-25'
     # maxTweets: int, maximum number of tweets to be retrieved - 1000
-    # minimum_likes: int, default is 1000000, searching tweets starting from a minimum number of likes - 5000
-    # declineRate: float, default is 0.75, the rate at which minimum_likes decreases. Range is (0,1), if out of 
+    # minimum_likes: int, default is 1000, searching tweets starting from a minimum number of likes - 5000
+    # declineRate: float, default is 0.2, the rate at which minimum_likes decreases. Range is (0,1), if out of 
     #              range, converts it to fit the range
     ###
 
     # 0 < declineRate < 1 
     from math import floor
     if(declineRate == 0 or declineRate == 1):
-        print("declineRate cannot be {}. Using default value 0.75".format(declineRate))
+        print("declineRate cannot be {}. Using default value 0.2".format(declineRate))
         declineRate = 0.75
     elif(abs(declineRate) > 1):
         declineRate = round(1/abs(declineRate), 2)
@@ -143,6 +147,7 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_like
     elif(declineRate < 0):
         declineRate = abs(declineRate)
         print("0 < declineRate < 1. Using declineRate = |declineRate| = {}".format(declineRate))
+
 
     # Iniitialize current_data_list and desired_data_list (to be returned)
     current_data_list = retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes)
@@ -165,9 +170,9 @@ def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_like
             return current_data_list, 'An error has occured'
 
     # Gather some information about the retrieved tweets
-    message = generateMessage(minimum_likes, desired_data_list)
+    # message = generateMessage(minimum_likes, desired_data_list)
 
-    return desired_data_list, message
+    return desired_data_list, 'TEMP' # , message
     
 
 
@@ -266,6 +271,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 #     authkey    : String 'auth-key',          // utilized in nodejs server framework security
 #     error      : Boolean false,              // utilized in nodejs server framework
 #   }
+#   foStr:  String ""   || Identifier used to mark the print statement as the final output
+#   capStr: String ""   || Identifier used to mark beggining of data to be parsed
+#   sid:    Int    0    || Scraper ID, Identifier used in NodeJS functions to process, transfer,
+#                       || and manage the correct set of data for each scraper. (Multi-scraper func.)
 #
 # *dictionaries may include extra fields not highlited here, but are likely trivial*
 
@@ -273,6 +282,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 ni     = json.loads(sys.argv[1])
 foStr  = sys.argv[2]
 capStr = sys.argv[3]
+sid    = sys.argv[4]
 
 # collect tweets
 if ni["mode"] == "retreive":
@@ -298,10 +308,12 @@ elif ni["mode"] == "write":
 # {
 #   "$format$" : Str "json" || "r/w mongodb",    //string displaying whether the
 #                                                //format of the data will be a json
-#                                                //or TBD
+#                                                //or something else (TBD)
 #   "$data$" : List [] || TBD                    //data returned from python script
+#   "$SID$"  : Int 12345                         //Identifier for the scraper. Used
+#                                                //to avoid data bleed in mongodb
 # }
 # """
-final_output = f"""{foStr}{capStr}{{"$format$" : "{o_format}","$data$" : {output_str}}}"""
+final_output = f"""{foStr}{capStr}{{"$format$" : "{o_format}","$data$" : {output_str},"$SID$" : {sid}}}"""
 print(final_output)
 ###
