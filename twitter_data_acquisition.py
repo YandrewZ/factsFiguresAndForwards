@@ -113,7 +113,7 @@ def retrieveTweets(keyword, startDate, endDate, maxTweets, minimum_likes=0):
 def fetchTopTweetsIterative(keyword, startDate, endDate, maxTweets, minimum_likes=1000000, declineRate = 0.75):
     ###
     # RETURN:    A list of dictionaries with fields of tweet info, length not guaranteed to be maxTweets
-    #            - fields: string text , datetime datetime , int likeCount, int retweetCount
+    #            - fields: string text, datetime datetime, int likeCount, int retweetCount
     #                   int replyCount, int quoteCount, (list links - only when outlinks exist)
     #         AND
     #            A string message that contains number of minimum likes, number of tweets, 
