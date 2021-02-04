@@ -1,3 +1,6 @@
+    
+    ##### Basic Database Operation Section #####
+
 def findTweets(uri, db, collection, query):
     ###
     # RETURN:   A pymongo.cursor.Cursor object, containing a number of tweets to be analyzed
@@ -22,9 +25,36 @@ def findTweets(uri, db, collection, query):
 
     return cursor
 
+
 ### Some useful queries: 
 # tweets without sentiment field - query={'sentiment': {'$exists': False }}
-#
+###
+
+
+def updateStats(uri, db, collection, filterQuery, update, upsert=False):
+    ###
+    # RETURN:   A pymongo.results.UpdateResult object, containing acknowledged,
+    #           matched_count, modified_count, raw_result, and upserted_id
+    # 
+    # uri: string, connection string
+    # db: string, database name
+    # collection: string, collection name
+    # filterQuery: dict, filter used for the query operation
+    # update: dict, update operations
+    # upsert: boolean, whether or not to upsert
+    ###
+    
+    import pymongo
+
+    client = pymongo.MongoClient(uri)
+    col_handle = client[db][collection]
+
+    update_result = col_handle.update_one(filterQuery, update, upsert=upsert)
+    return update_result
+
+
+
+    ##### Sentiment Analysis Section #####
 
 def findTweetsWithoutSentiment(uri, db, collection, query={'sentiment': {'$exists': False }}):
     return findTweets(uri, db, collection, query)
@@ -108,7 +138,11 @@ def updateTweetsAfterSentimentAnalysis(sentimentalTweets, uri, db, collection):
 
 
 
+    ##### Statistics Section #####
 
+        #### Basic ####
+
+            ### Distribution ###
 
 def popularityStatistics(cursor, measure):
     ###
@@ -180,7 +214,7 @@ def popularityStatistics(cursor, measure):
     return rawStats
 
 
-
+## Overloaded Method
 def popularityStatistics(countList, measure):
     ### Overloaded Method
     # RETURN:   A dict of statistics of (the distribution of) one popularity measure in cursor
@@ -252,13 +286,11 @@ def popularityStatistics(countList, measure):
 
 
 
-
-
-
-def generallStatistics(cursor, datetime):
+## Uses popularityStatistics
+def generalPopularityStatistics(cursor, datetime):
     ###
     # RETURN:   A dict of statistics of all four popularity measures in cursor
-    #           - fields: datetime datetime, int totalEntries,
+    #           - fields: string category="statistics", datetime.date date, int totalEntries,
     #                   dict likeStats (rawStats from popularityStatistics),
     #                   dict retweetStats (rawStats from popularityStatistics),
     #                   dict replyStats (rawStats from popularityStatistics), 
@@ -292,7 +324,8 @@ def generallStatistics(cursor, datetime):
     quoteStats = popularityStatistics(cursor,'quoteCount')
 
     stats = {
-        'datetime': datetime,
+        'category': 'statistics',
+        'datetime': datetime.day(),
         'totalEntries': totalEntries,
         'likeStats': likeStats,
         'retweetStats': retweetStats,
@@ -302,11 +335,11 @@ def generallStatistics(cursor, datetime):
 
     return stats
 
-
-def generallStatistics(tweetsList, datetime):
+## Overloaded Method
+def generalPopularityStatistics(tweetsList, datetime):
     ### Overloaded Method
     # RETURN:   A dict of statistics of all four popularity measures in cursor
-    #           - fields: datetime datetime, int totalEntries,
+    #           - fields: string category='statistics', datetime.date date, int totalEntries,
     #                   dict likeStats (rawStats from popularityStatistics),
     #                   dict retweetStats (rawStats from popularityStatistics),
     #                   dict replyStats (rawStats from popularityStatistics), 
@@ -339,7 +372,8 @@ def generallStatistics(tweetsList, datetime):
     quoteStats = popularityStatistics(quotesList,'quoteCount')
 
     stats = {
-        'datetime': datetime,
+        'category': 'statistics',
+        'datetime': datetime.date(),
         'totalEntries': totalEntries,
         'likeStats': likeStats,
         'retweetStats': retweetStats,
@@ -348,3 +382,109 @@ def generallStatistics(tweetsList, datetime):
     }
 
     return stats
+
+        
+        
+        ### Correlation ###
+
+def sentimentCorrelationStatistics(tweet_df, popularityMeasure, sentimentMeasure):
+    # RETURN:   r: float, Pearson’s correlation coefficient
+    #           p: float, Two-tailed p-value
+    # 
+    # tweet_df: dataframe, of tweet entries
+    # popularityMeasure: string, one of 'likeCount', 'retweetCount', 'replyCount', 'quoteCount'
+    # sentimenMeasure: string, one of 'polarity', 'objectivity'
+    ###
+    
+    import pandas
+    popularity_df = tweet_df[popularityMeasure]
+    sentiment_df = tweet_df[sentimentMeasure]
+
+    from scipy import stats
+
+    r, p = stats.pearsonr(popularity_df, sentiment_df)
+
+    return r, p
+
+
+
+## Uses sentimentCorrelationStatistics
+def generalSentimentCorrelationStatistics(uri, db, collection, start_datetime, end_datetime):
+    # RETURN:   sentimentStats: dict, of correlations of every popularity measure against
+    #           every sentiment measure
+    #           - fields: dict likeCount_v_polarity (correlation coefficient and p-value)
+    #                     dict likeCount_v_objectivity (correlation coefficient and p-value)
+    #                     dict retweetCount_v_polarity (correlation coefficient and p-value)
+    #                     dict retweetCount_v_objectivity (correlation coefficient and p-value)
+    #                     dict replyCount_v_polarity (correlation coefficient and p-value)
+    #                     dict replyCount_v_objectivity (correlation coefficient and p-value)
+    #                     dict quoteCount_v_polarity (correlation coefficient and p-value)
+    #                     dict quoteCount_v_objectivity (correlation coefficient and p-value)
+    # 
+    # uri: string, connection string
+    # db: string, database name
+    # collection: string, collection name
+    # start_datetime: string, starting datetime of the tweets being analyzed - '2020-06-25-00-00'
+    # end_datetime: string, ending datetime of the tweets being analyzed - '2020-06-26-00-00'
+    ###
+
+    import pymongo
+    import pandas as pd
+    from pandas.io.json import json_normalize
+
+    popularities = ['likeCount', 'retweetCount', 'replyCount', 'quoteCount']
+    sentiments = ['polarity', 'objectivity']
+
+    query = {'datetime': {'$gte': start_datetime, 'lte': end_datetime}}
+    projection = {
+        "_id": 0, 
+        popularities[0]: 1,
+        popularities[1]: 1,
+        popularities[2]: 1,
+        popularities[3]: 1, 
+        "sentiment."+sentiments[0]: 1,
+        "sentiment."+sentiments[1]: 1
+    }
+    cursor = findTweets(uri, db, collection, query=query, projection=projection)
+
+    # Organize the data in the cursor into a dataframe
+    tweet_df = json_normalize(list(cursor))
+    tweet_df.rename(
+        columns={"sentiment."+sentiments[0]: sentiments[0], "sentiment."+sentiments[1]: sentiments[1]},
+        inplace=True)
+
+    sentimentStats = {}
+
+    for i in popularities:
+        for j  in sentiments:
+            r, p = sentimentCorrelationStatistics(tweet_df, i, j)
+            key = j+"_v_"+i
+            sentimentStats[key] = {'r': r, 'p_value': p}
+
+    return sentimentStats
+
+
+
+## Uses generalSentimentCorrelationStatistics
+def dailySentimentCorrelationStatistics(uri, db, collection, date):
+    # RETURN:   # RETURN:   A pymongo.results.UpdateResult object, containing acknowledged,
+    #           matched_count, modified_count, raw_result, and upserted_id
+    # 
+    # uri: string, connection string
+    # db: string, database name
+    # collection: string, collection name
+    # datetime: string, date of the tweets being analyzed - '2020-06-25'
+    ###
+    
+    import datetime
+
+    start_datetime = date
+    end_datetime = date + datetime.timedelta(days=1)
+
+    sentimentStats = generalSentimentCorrelationStatistics(start_datetime, end_datetime)
+
+    filterQuery = {'category': 'statistics', 'date': date}
+    update = {'$set': {'sentimenCorrelations': sentimentStats}}
+
+    result = updateStats(uri, db, collection, filterQuery, update, upsert=True)
+    return result
